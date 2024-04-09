@@ -18,19 +18,18 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { ThemeSwitch } from "./theme-switch";
+import { getServerSession } from "next-auth";
+import { authOptions } from "@/app/api/auth/[...nextauth]/options";
 
-export function TestCard() {
+export async function TestCard() {
+  const session = await getServerSession(authOptions);
   return (
     <Card className="w-[350px]">
       <CardHeader>
-        <CardTitle>Create project</CardTitle>
+        <CardTitle>Welcome back {session?.user.username}</CardTitle>
         <CardDescription>Deploy your new project in one-click.</CardDescription>
       </CardHeader>
       <CardContent>
-        <div className="p-4">
-          <ThemeSwitch></ThemeSwitch>
-        </div>
         <form>
           <div className="grid w-full items-center gap-4">
             <div className="flex flex-col space-y-1.5">
