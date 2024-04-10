@@ -2,7 +2,10 @@ import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
 
 export function middleware(request: NextRequest) {
-  let sessionToken = request.cookies.get("next-auth.session-token");
+  const devSessionToken = request.cookies.get("next-auth.session-token"); // development
+  const prodSessionToken = request.cookies.get("__Secure-next-auth.session-token"); // production
+
+  const sessionToken = prodSessionToken || devSessionToken;
 
   // If there's no session token and the user is not on the login page, redirect to "/login"
   if (!sessionToken && request.nextUrl.pathname !== "/login") {
