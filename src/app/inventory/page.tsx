@@ -5,8 +5,8 @@ export default async function DashboardPage() {
   const session = await getServerSession(authOptions);
 
   return (
-    <div className="flex h-full items-center justify-center bg-green-500">
-      <h1>Welcome to dashboard page {session?.user.username}</h1>
+    <div className="flex h-full items-center justify-center bg-red-500">
+      <h1>Welcome to inventory page {session?.user.username}</h1>
     </div>
   );
 }

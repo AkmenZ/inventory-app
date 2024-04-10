@@ -1,7 +1,6 @@
 "use client";
 
 import { signIn, useSession } from "next-auth/react";
-
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
@@ -17,8 +16,8 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { useRouter } from "next/navigation";
-import { useEffect } from "react";
-import { Progress } from "@/components/ui/progress";
+import { useEffect, useState } from "react";
+import { Loader2 } from "lucide-react";
 
 // credentials schema
 const formSchema = z.object({
@@ -28,13 +27,14 @@ const formSchema = z.object({
 
 export default function Login() {
   const { data: session, status } = useSession();
+  const [isLoading, setIsLoading] = useState(false);
   const router = useRouter();
 
-  useEffect(() => {
-    if (status === "authenticated") {
-      router.replace("/");
-    }
-  }, [session, status, router]);
+  // useEffect(() => {
+  //   if (status === "authenticated") {
+  //     router.replace("/");
+  //   }
+  // }, [session, status, router]);
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -45,12 +45,16 @@ export default function Login() {
   });
 
   async function onSubmit(values: z.infer<typeof formSchema>) {
+    setIsLoading(true);
+
     // Attempt to sign in with the provided credentials
     const result = await signIn("credentials", {
       redirect: false, // Prevents redirecting to the callback URL automatically
       username: values.username,
       password: values.password,
     });
+
+    setIsLoading(false);
 
     if (result?.error) {
       // Handle errors here. For example, show an error message.
@@ -60,20 +64,13 @@ export default function Login() {
       // Handle success. For example, redirect the user or fetch session data.
       // Redirect to the homepage or user dashboard if login was successful
       router.replace("/");
+      router.refresh();
     }
-  }
-
-  if (status === "loading") {
-    return (
-      <div>
-        <Progress></Progress>
-      </div>
-    );
   }
 
   if (status == "unauthenticated") {
     return (
-      <div className="flex justify-center items-center h-screen">
+      <div className="flex justify-center items-center h-full pt-20">
         <div className="w-72 space-y-4">
           <Form {...form}>
             <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
@@ -106,8 +103,15 @@ export default function Login() {
                 )}
               />
               <div className="pt-8 flex justify-center">
-                <Button type="submit" className="w-full">
-                  Ienākt
+                <Button type="submit" className="w-full" disabled={isLoading}>
+                  {isLoading ? (
+                    <>
+                      <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                      Ielādē...
+                    </>
+                  ) : (
+                    "Ienākt"
+                  )}
                 </Button>
               </div>
             </form>
