@@ -17,6 +17,9 @@ export default async function Navbar() {
         alt="logo"
       ></Image>
       <div className="flex items-center space-x-4">
+        {session?.user ? (
+          <p>{`${session.user.firstName} ${session.user.lastName}`}</p>
+        ) : null}
         <ThemeSwitch></ThemeSwitch>
         {session?.user ? <SignOutButton></SignOutButton> : null}
       </div>

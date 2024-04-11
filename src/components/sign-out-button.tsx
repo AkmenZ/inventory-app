@@ -11,5 +11,9 @@ export default function SignOutButton() {
     });
   };
 
-  return <Button onClick={handleSignOut}>Iziet</Button>;
+  return (
+    <Button className="text-white" onClick={handleSignOut}>
+      Iziet
+    </Button>
+  );
 }
