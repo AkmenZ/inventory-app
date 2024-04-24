@@ -70,7 +70,7 @@ export default function Login() {
 
   if (status == "unauthenticated") {
     return (
-      <div className="flex justify-center items-center h-full pt-20">
+      <div className="flex justify-center items-center pt-24">
         <div className="w-72 space-y-4">
           <Form {...form}>
             <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
@@ -103,7 +103,11 @@ export default function Login() {
                 )}
               />
               <div className="pt-8 flex justify-center">
-                <Button type="submit" className="w-full text-white" disabled={isLoading}>
+                <Button
+                  type="submit"
+                  className="w-full text-white"
+                  disabled={isLoading}
+                >
                   {isLoading ? (
                     <>
                       <Loader2 className="mr-2 h-4 w-4 animate-spin" />

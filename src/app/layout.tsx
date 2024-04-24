@@ -4,7 +4,6 @@ import "./globals.css";
 import { ThemeProvider } from "@/lib/theme-provider";
 import Navbar from "@/components/navbar";
 import SessionProvider from "@/lib/session-provider";
-import Sidebar from "@/components/sidebar";
 import Footer from "@/components/footer";
 
 const inter = Inter({ subsets: ["latin"] });
@@ -29,10 +28,7 @@ export default function RootLayout({
             disableTransitionOnChange
           >
             <Navbar />
-            <div className="flex h-screen overflow-hidden">
-              <Sidebar />
-              <main className="flex-1 overflow-y-auto">{children}</main>
-            </div>
+            <main>{children}</main>
             <Footer></Footer>
           </ThemeProvider>
         </SessionProvider>
