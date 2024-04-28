@@ -50,13 +50,18 @@ export function DataTable<TData, TValue>({
     },
   });
 
-  // for testing
-  const handleRowClick = (data: TData) => {
-    console.log(data);
-  };
-
   return (
     <>
+      <div className="flex items-center py-4">
+        <Input
+          placeholder="Meklēt pēc nosaukuma..."
+          value={(table.getColumn("name")?.getFilterValue() as string) ?? ""}
+          onChange={(event) =>
+            table.getColumn("name")?.setFilterValue(event.target.value)
+          }
+          className="max-w-sm"
+        />
+      </div>
       <div className="rounded-md border">
         <Table>
           <TableHeader>
@@ -86,12 +91,9 @@ export function DataTable<TData, TValue>({
                 <TableRow
                   key={row.id}
                   data-state={row.getIsSelected() && "selected"}
-                  onClick={() => handleRowClick(row.original)}
                 >
                   {row.getVisibleCells().map((cell) => (
-                    <TableCell
-                      key={cell.id}
-                    >
+                    <TableCell key={cell.id}>
                       {flexRender(
                         cell.column.columnDef.cell,
                         cell.getContext()

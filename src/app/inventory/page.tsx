@@ -1,90 +1,73 @@
+"use client";
+
+import { useRef, useState } from "react";
 import { Button } from "@/components/ui/button";
+import readExcelFile from "read-excel-file";
 import { Product, columns } from "./columns";
 import { DataTable } from "./data-table";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
 
-async function getData(): Promise<Product[]> {
-  // Fetch data from your API here.
-  return [
-    {
-      id: "728ed52f",
-      name: "Dzeltena Tulpe",
-      date: "23/04/2024",
-      quantity: 100,
-      priceVAT: 80,
-      priceSale: 90,
-      store: "Rīga",
-      status: "success",
-    },
-    {
-      id: "728ed52f",
-      name: "Pienenes",
-      date: "23/04/2024",
-      quantity: 200,
-      priceVAT: 100,
-      priceSale: 120,
-      store: "Tukums",
-      status: "success",
-    },
-    {
-      id: "728ed52f",
-      name: "Sarkana Roze",
-      date: "23/04/2024",
-      quantity: 200,
-      priceVAT: 100,
-      priceSale: 120,
-      store: "Kandava",
-      status: "success",
-    },
-    {
-      id: "728ed52f",
-      name: "Balta Roze",
-      date: "23/04/2024",
-      quantity: 200,
-      priceVAT: 100,
-      priceSale: 120,
-      store: "Tukums",
-      status: "success",
-    },
-    {
-      id: "728ed52f",
-      name: "Dižskabardzis",
-      date: "24/04/2024",
-      quantity: 300,
-      priceVAT: 100,
-      priceSale: 120,
-      store: "Bauska",
-      status: "success",
-    },
-    {
-      id: "728ed52f",
-      name: "Sarkana Roze",
-      date: "24/04/2024",
-      quantity: 50,
-      priceVAT: 70,
-      priceSale: 85,
-      store: "Rīga",
-      status: "success",
-    },
-    // ...
-  ];
-}
+export default function InventoryPage() {
+  const [jsonData, setJsonData] = useState<Product[]>([]);
+  const fileInputRef = useRef<HTMLInputElement | null>(null);
 
-export default async function InventoryPage() {
-  const data = await getData();
+  // convert .xlsx to json
+  const handleConvert = () => {
+    const file = fileInputRef.current?.files?.[0];
+    if (file) {
+      readExcelFile(file)
+        .then((rows: any[]) => {
+          const json: Product[] = rows.slice(1).map((row) => {
+            const obj: any = {};
+            rows[0].forEach((header: string, i: number) => {
+              obj[header] = row[i];
+            });
+            return obj as Product;
+          });
+          console.log(json);
+          setJsonData(json);
+        })
+        .catch((error) => {
+          console.error("Error reading file:", error);
+          setJsonData([]);
+        });
+    }
+  };
 
   return (
     <div className="container flex flex-col h-screen items-center justify-start">
-      <h1 className="text-2xl font-semibold py-4">
-        Bāzes Inventorijas Kopskats
-      </h1>
+      <h1 className="text-2xl font-semibold py-4">Pievienot Failu</h1>
 
-      <div className="w-full flex justify-end">
-        <Button className="text-white">Augšuplādēt CSV</Button>
+      <div className="flex w-full items-end justify-between">
+        <div className="flex flex-row items-end space-x-2">
+          <div>
+            <Label htmlFor="text" className="text-primary text-xs font-light">
+              Derīgs formāts .xlsx, .xls
+            </Label>
+            <Input
+              type="file"
+              accept=".xls,.xlsx"
+              ref={fileInputRef}
+              className="bg-secondary"
+            />
+          </div>
+          <Button className="text-white" onClick={handleConvert}>
+            Apstrādāt
+          </Button>
+        </div>
+        {jsonData.length > 0 && (
+          <Button className="ml-2 text-white bg-green-600 hover:bg-green-800">
+            Saglabāt
+          </Button>
+        )}
       </div>
 
-      <div className="w-full py-4">
-        <DataTable columns={columns} data={data} />
-      </div>
+      {jsonData.length > 0 && (
+        <div className="w-full py-4">
+          <DataTable columns={columns} data={jsonData} />
+        </div>
+      )}
     </div>
   );
 }

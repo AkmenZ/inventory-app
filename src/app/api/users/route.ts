@@ -16,6 +16,7 @@ const userSchema = z.object({
   role: z.enum(["admin", "user"]),
 });
 
+// POST new user
 export async function POST(req: Request) {
   try {
     const body = await req.json();
@@ -33,11 +34,11 @@ export async function POST(req: Request) {
       );
     }
 
-    const hahsedPassword = await bcrypt.hash(password, 10);
+    const hashedPassword = await bcrypt.hash(password, 10);
     const newUser = await db.user.create({
       data: {
         username,
-        password: hahsedPassword,
+        password: hashedPassword,
         firstName,
         lastName,
         role,
@@ -50,6 +51,34 @@ export async function POST(req: Request) {
       { user: userData, message: "User added successfully!" },
       { status: 201 }
     );
+  } catch (error) {
+    return NextResponse.json(
+      { message: "Something is wrong mate!" },
+      { status: 500 }
+    );
+  }
+}
+
+// GET all users
+export async function GET(req: Request) {
+  try {
+    const users = await db.user.findMany({
+      // comment out to return everything
+      select: {
+        id: true,
+        username: true,
+        firstName: true,
+        lastName: true,
+        role: true,
+      },
+    });
+
+    if (users.length === 0) {
+      return NextResponse.json({ message: "No users found!" }, { status: 404 });
+    }
+
+    return NextResponse.json({ users }, { status: 200 });
+
   } catch (error) {
     return NextResponse.json(
       { message: "Something is wrong mate!" },

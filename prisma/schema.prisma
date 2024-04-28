@@ -22,3 +22,13 @@ model User {
   role        String
   createdAt   DateTime @default(now())
 }
+
+model Product {
+  id          String @id @default(auto()) @map("_id") @db.ObjectId
+  name        String
+  date        DateTime
+  quantity    Int
+  priceVAT    Float
+  priceSale   Float
+  store       String
+}

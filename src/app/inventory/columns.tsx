@@ -19,10 +19,6 @@ export type Product = {
 
 export const columns: ColumnDef<Product>[] = [
   {
-    accessorKey: "status",
-    header: "Statuss",
-  },
-  {
     accessorKey: "name",
     header: "Nosaukums",
   },
@@ -44,16 +40,6 @@ export const columns: ColumnDef<Product>[] = [
   },
   {
     accessorKey: "store",
-    header: ({ column }) => {
-        return (
-          <Button
-            variant="ghost"
-            onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-          >
-            Veikals
-            <ArrowUpDown className="ml-2 h-4 w-4" />
-          </Button>
-        )
-      },
+    header: "Veikals"
   },
 ];

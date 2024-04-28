@@ -26,10 +26,10 @@ export function ThemeSwitch() {
       </DropdownMenuTrigger>
       <DropdownMenuContent align="end">
         <DropdownMenuItem onClick={() => setTheme("light")}>
-          Gaišā
+          Gaišais skats
         </DropdownMenuItem>
         <DropdownMenuItem onClick={() => setTheme("dark")}>
-          Tumšā
+          Tumšais skats
         </DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenu>

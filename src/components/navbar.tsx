@@ -16,8 +16,9 @@ export default async function Navbar() {
           className="ml-4"
           src="/zz_logo.png"
           width={120}
-          height={20}
+          height={40}
           alt="logo"
+          priority={false}
         ></Image>
         <div className="flex items-center space-x-4">
           {session?.user ? (
@@ -29,21 +30,21 @@ export default async function Navbar() {
       </div>
 
       {session?.user ? (
-        <div className="w-full flex justify-evenly py-4 bg-secondary">
+        <div className="w-full flex justify-center py-4 bg-secondary">
           <nav>
-            <ul className="flex list-none m-0 p-0">
-              <li className="mr-6">
+            <ul className="flex list-none m-0 p-0 space-x-4">
+              <li>
                 <Link href="dashboard">
-                <NavButton pathname="/dashboard">Kopskats</NavButton>
+                  <NavButton pathname="/dashboard">Kopskats</NavButton>
                 </Link>
               </li>
-              <li className="mr-6">
+              <li>
                 <Link href="inventory">
-                <NavButton pathname="/inventory">Inventorija</NavButton>
+                  <NavButton pathname="/inventory">Inventorija</NavButton>
                 </Link>
               </li>
               {session?.user?.role === "admin" && (
-                <li className="mr-6">
+                <li>
                   <Link href="admin">
                     <NavButton pathname="/admin">Administrācija</NavButton>
                   </Link>
